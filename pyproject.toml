@@ -17,6 +17,7 @@ dependencies = [
     "modelcif==0.7",
     "bio==1.7.1",
     "fire==0.7.0",
+    "huggingface-hub",
     "hydra-core",
     "dm-tree",
     "stackprinter",
