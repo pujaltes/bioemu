@@ -5,8 +5,12 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 BIOEMU_ENV_NAME="bioemu"
 UPDATE_ENV="${UPDATE_ENV:-0}"
 
-# Set up colabfold
-export COLABFOLD_DIR=$HOME/.localcolabfold # Where colabfold will be installed
+# Set COLABFOLD_DIR to ~/.localcolabfold if env var not set
+if [[ -z "${COLABFOLD_DIR}" ]]; then
+  COLABFOLD_DIR=~/.localcolabfold
+else
+  COLABFOLD_DIR="${COLABFOLD_DIR}"
+fi
 if [ -f $COLABFOLD_DIR/localcolabfold/colabfold-conda/bin/colabfold_batch ]; then
   echo "colabfold already installed in $COLABFOLD_DIR/localcolabfold/colabfold-conda/bin/colabfold_batch"
 else
