@@ -28,7 +28,7 @@ This repository contains inference code and model weights.
 Run `setup.sh` to create a conda environment named 'bioemu' with bioemu and its dependencies installed.  `setup.sh` will install and patch [ColabFold](https://github.com/sokrypton/ColabFold), create a conda environment called 'bioemu' with some installed dependencies that pip does not handle, and then pip-install the `bioemu` package inside the conda environment.
 
 ## Sampling structures
-You can sample structures for a given protein sequence using the script `sample.py`. For example, to run a tiny test using the default model parameters and denoising settings:
+You can sample structures for a given protein sequence using the script `sample.py`. To run a tiny test using the default model parameters and denoising settings:
 ```
 python -m bioemu.sample --sequence GYDPETGTWG --num_samples 10 --output_dir ~/test-chignolin
 ```
