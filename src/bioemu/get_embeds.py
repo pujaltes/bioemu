@@ -45,28 +45,35 @@ def _get_default_embeds_dir() -> StrPath:
     return os.path.join(_get_colabfold_install_dir(), "embeds_cache")
 
 
-def run_colabfold(fasta_file: StrPath, res_dir: StrPath, colabfold_env: dict[str, str]) -> int:
-    return subprocess.call(
-        [
-            "colabfold_batch",
-            fasta_file,
-            res_dir,
-            "--num-models",
-            "1",
-            "--model-order",
-            "3",
-            "--model-type",
-            "alphafold2",
-            "--num-recycle",
-            "0",
-            "--save-single-representations",
-            "--save-pair-representations",
-        ],
-        env=colabfold_env,
-    )
+def run_colabfold(
+    fasta_file: StrPath,
+    res_dir: StrPath,
+    colabfold_env: dict[str, str],
+    msa_host_url: str | None = None,
+) -> int:
+    cmd = [
+        "colabfold_batch",
+        fasta_file,
+        res_dir,
+        "--num-models",
+        "1",
+        "--model-order",
+        "3",
+        "--model-type",
+        "alphafold2",
+        "--num-recycle",
+        "0",
+        "--save-single-representations",
+        "--save-pair-representations",
+    ]
+    if msa_host_url is not None:
+        cmd.extend(["--host-url", msa_host_url])
+    return subprocess.call(cmd, env=colabfold_env)
 
 
-def get_colabfold_embeds(seq: str, cache_embeds_dir: StrPath | None) -> tuple[StrPath, StrPath]:
+def get_colabfold_embeds(
+    seq: str, cache_embeds_dir: StrPath | None, msa_host_url: str | None = None
+) -> tuple[StrPath, StrPath]:
     """
     Uses colabfold to retrieve embeddings for a given sequence. If the embeddings are already stored under `cache_embeds_dir`,
     the cached embeddings are returned. Otherwise, colabfold is used to compute the embeddings and they are saved under `cache_embeds_dir`.
@@ -109,7 +116,7 @@ def get_colabfold_embeds(seq: str, cache_embeds_dir: StrPath | None) -> tuple[St
         res_dir = os.path.join(tempdir, "results")
         os.makedirs(res_dir)
         write_fasta(seqs=[seq], fasta_file=fasta_file, ids=[seqsha])
-        res = run_colabfold(fasta_file, res_dir, colabfold_env)
+        res = run_colabfold(fasta_file, res_dir, colabfold_env, msa_host_url)
         assert res == 0, "Failed to run colabfold_batch"
 
         single_rep_tempfile = os.path.join(

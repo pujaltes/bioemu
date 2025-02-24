@@ -10,7 +10,9 @@ from bioemu.get_embeds import StrPath, get_colabfold_embeds, shahexencode
 TEST_SEQ = "TESTSEQ"
 
 
-def mock_run_colabfold(fasta_file: StrPath, res_dir: StrPath, colabfold_env: dict[str, str]) -> int:
+def mock_run_colabfold(
+    fasta_file: StrPath, res_dir: StrPath, colabfold_env: dict[str, str], msa_host_url: str | None
+) -> int:
     seq = TEST_SEQ
     seqsha = os.path.basename(fasta_file).split(".")[0]
     single_rep_tempfile = os.path.join(
